@@ -55,6 +55,71 @@ public class MapReader {
 		return roadList;
 	}
 	
+	public List<Movement> get_Moves(Node curPos,Node goal) {
+		ArrayList<Movement> moves=new ArrayList<Movement>();
+		if (current.isJunction()){
+			int i;
+			double heuristic=0;
+			for (i=0;i<roads.size();i++) {
+				/*Junction is start junction in Road*/
+				if (curPos.getName().equals(roads.get(i).getStart())) {
+					/*Check if road is the goal road*/
+					if (goal.getDefRoad().equals(roads.get(i).getName())) {
+						String name=goal.getName();
+						int number=goal.getHouseNumber();
+						double lotWidth=2*roads.get(i).getLength()/roads.get(i).getLots();
+						
+						//Even
+						if (number%2==0) {
+							double dist=lotWidth*(number-1)/2;
+						}
+							//Odd
+						else { 
+							double dist=lotWidth*number/2;
+						}
+						
+						double cost=curPos.getCost()+dist;
+						/*Ask to modify constructor*/
+						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,curPos);
+						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
+						moves.add(movToAdd);
+					}else {
+						Node nodeToAdd=new Node(roads.get(i).getEnd(),null,curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
+						moves.add(movToAdd);
+					}
+				}
+				/*Junction is end junction in Road*/
+				else if(curPos.getName().equals(roads.get(i).getEnd())) {
+					if (goal.getDefRoad().equals(roads.get(i).getName())) {
+						String name=goal.getName();
+						int number=goal.getHouseNumber();
+						double lotWidth=2*roads.get(i).getLength()/roads.get(i).getLots();
+						
+						//Even
+						if (number%2==0) {
+							double dist=lotWidth*(roads.get(i).getLots()-number+1)/2;
+						}
+							//Odd
+						else { 
+							double dist=lotWidth*(roads.get(i).getLots()-number+2)/2;
+						}
+						
+						double cost=curPos.getCost()+dist;
+						/*Ask to modify constructor*/
+						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,curPos);
+						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
+						moves.add(movToAdd);
+					}else {
+						Node nodeToAdd=new Node(roads.get(i).getStart(),null,curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
+						moves.add(movToAdd);
+					}
+				}
+			}
+		}
+	}
+	
 	// Queries
 	
 	/**
