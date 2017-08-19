@@ -126,7 +126,7 @@ public class Node {
      * @return
      */
     public boolean isJunction() {
-    	if(adjRoads != null)
+    	if(houseNumber == 0)
     		return true;
     	return false;
     }
