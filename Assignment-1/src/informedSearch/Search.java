@@ -3,6 +3,7 @@ package informedSearch;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.io.*;
+import java.util.Hashtable;
 
 public class Search {
 	private Node root;

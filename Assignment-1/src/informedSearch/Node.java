@@ -41,10 +41,10 @@ public class Node {
     	totalCost = cost + heuristic;
     }
     
-    public Node(String name, String road, double cost, double heuristic,
+    public Node(String name, double cost, double heuristic,
     		Node parent) {
     	this.name = name;
-    	defRoad = road;
+    	defRoad = null;
     	houseNumber = 0;
     	adjRoads = new ArrayList<Road>();
     	this.cost = cost;
