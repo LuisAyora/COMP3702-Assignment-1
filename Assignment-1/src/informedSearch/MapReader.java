@@ -58,7 +58,7 @@ public class MapReader {
 	
 	public List<Movement> get_Moves(Node curPos,Node goal) {
 		ArrayList<Movement> moves=new ArrayList<Movement>();
-		if (current.isJunction()){
+		if (curPos.isJunction()){
 			double heuristic=0;
 			for (Enumeration<String> enumerator=roads.keys();enumerator.hasMoreElements();) {
 				/*Junction is start junction in Road*/
@@ -71,20 +71,23 @@ public class MapReader {
 						double lotWidth=2*roads.get(i).getLength()/roads.get(i).getLots();
 						
 						//Even
+						double dist;
 						if (number%2==0) {
-							double dist=lotWidth*(number-1)/2;
+							dist=lotWidth*(number-1)/2;
 						}
-							//Odd
+						//Odd
 						else { 
-							double dist=lotWidth*number/2;
+							dist=lotWidth*number/2;
 						}
 						
 						double cost=curPos.getCost()+dist;
 						/*Ask to modify constructor*/
+						/*Create Goal Node*/
 						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}else {
+						/*Create junction node*/
 						Node nodeToAdd=new Node(roads.get(i).getEnd(),null,curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
@@ -99,21 +102,24 @@ public class MapReader {
 						int number=goal.getHouseNumber();
 						double lotWidth=2*roads.get(i).getLength()/roads.get(i).getLots();
 						
+						
+						double dist;
 						//Even
 						if (number%2==0) {
-							double dist=lotWidth*(roads.get(i).getLots()-number+1)/2;
+							dist=lotWidth*(roads.get(i).getLots()-number+1)/2;
 						}
 							//Odd
 						else { 
-							double dist=lotWidth*(roads.get(i).getLots()-number+2)/2;
+							dist=lotWidth*(roads.get(i).getLots()-number+2)/2;
 						}
 						
 						double cost=curPos.getCost()+dist;
-						/*Ask to modify constructor*/
+						/*Add Goal Node*/
 						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}else {
+						/*Add junction node*/
 						Node nodeToAdd=new Node(roads.get(i).getStart(),null,curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
@@ -149,7 +155,8 @@ public class MapReader {
 				double dist=lotWidth*Math.abs(numberGG-numberCC)/2;
 				
 				double cost=curPos.getCost()+dist;
-				/*Ask to modify constructor*/
+				
+				/*goal Node to be added*/
 				Node nodeToAdd=new Node(name,goal.getDefRoad(),numberG,cost,curPos);
 				Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 				moves.add(movToAdd);
@@ -170,6 +177,7 @@ public class MapReader {
 				double dist1=lotWidth*(number+1)/2;
 				double dist2=roads.get(curPos.getDefRoad()).getLength()-dist1;
 
+				/*Junction nodes to be added*/
 				Node nodeToAdd1=new Node(name1,null,curPos.getCost()+dist1,heuristic,curPos);
 				Movement movToAdd1=new Movement(nodeToAdd1,nodeToAdd1.getCost()+nodeToAdd1.getHeuristic());
 				moves.add(movToAdd1);
@@ -193,7 +201,7 @@ public class MapReader {
 	 * Get the list of Roads obtained from the text file 
 	 * @return
 	 */
-	List<Road> getRoads() {
+	Hashtable<String,Road> getRoads() {
 		return roads;
 	}
 	
@@ -203,15 +211,15 @@ public class MapReader {
 	 */
 	public String toString() {
 		String repr = new String();
-		for(Road r : roads) 
-			repr += r.toString() + "\n";
+		for(Enumeration<String> enumerator=roads.keys();enumerator.hasMoreElements();) 
+			repr += roads.get(enumerator.nextElement()).toString() + "\n";
 		return repr;
 	}
 	
 	// Dummy main method for testing.
 	public static void main(String[] args) {
 		MapReader mr = new MapReader("src/Files/test2.txt");
-		List<Road> rl = mr.getRoads();
+		Hashtable<String,Road> rl = mr.getRoads();
 		System.out.println(mr.toString());
 		System.out.println(rl.get(0).toString());
 	}	

@@ -1,90 +1,139 @@
 package informedSearch;
 
+import java.util.ArrayList;
+
 /**
  * 
  * @author The A-Team
- * An immutable class representing the nodes in a search algorithm graph.
+ * An mutable class representing the nodes in a search algorithm graph.
+ * Each node has a name, a defining road, associated length and heuristic
+ * costs. Root and goal nodes have no adjacent Roads, costs and the initial
+ * root no has no parent Node.
  *
  */
 
 public class Node {
-	private int houseLeft;
-	private int houseRight;
-	private Road road;
-	
-	/**
-	 * Constructor:
-	 * Instantiate a new Node with a Road and the houses associated with it.
-	 * @param Road road: the road in which the node is in.
-	 * @param int house: the house number where the node is in.
-	 * @require that the house number is smaller than the possible amount of
-	 *          houses in the street (road.getLots()).
-	 * @ensure that the node will be created and will operate appropriately in
-	 *         the search algorithm.
-	 */
-	public Node(Road road, int house) {
-		this.road = road;
-		if(house % 2 == 0) {
-		    houseRight = house;
-	        houseLeft = house - 1;
-	    }
-	    else {
-		    houseLeft = house;
-	        houseRight = house + 1;
-	    }
-	}
-	
-	/**
-	 * Return the Road of the Node.
-	 * @return Road road.
-	 */
-	public Road getRoad() {
-		return road;
-	}
-	
-	/**
-	 * Return the number of the house to the right of the Node.
-	 * @return int houseRight.
-	 */
-	public int getHouseRight() {
-		return houseRight;
-	}
-	
-	/**
-	 * Return the number of the house to the left of the Node.
-	 * @return int houseLeft.
-	 */
-	public int getHouseLeft() {
-		return houseLeft;
-	}
-	
-	/**
-	 * Determine if the node is at the start junction of the road.
-	 * @return True if it's at the beginning, false otherwise.
-	 */
-	boolean isBeginning() {
-		if(houseLeft == 1)
-			return true;
-		return false;
-	}
-	
-	/**
-	 * Determine if the node is at the end Junction of the road.
-	 * @return True if it's at the end, false otherwise.
-	 */
-	boolean isEnd() {
-		if(houseRight == road.getLots())
-			return true;
-		return false;
-	}
-	
-	@Override
-	/**
-	 * String representation of the Node.
-	 */
-	public String toString() {
-		return road.getName() + " between houses " + 
-	        Integer.toString(houseLeft) + " and " + 
-				Integer.toString(houseRight);
-	}
+	// Define the attributes that a Node requires:
+    private String name;
+    private String defRoad; // Road defined to differentiate nodes
+    private int houseNumber;
+    private ArrayList<Road> adjRoads;
+    private Node parent;
+    private double totalCost;
+    private double cost;
+    private double heuristic;
+    
+    /**
+     * Constructor:
+     * Instantiate the root Node object for the search
+     * algorithm by giving the name of the Node and the Road, 
+     * and the house number. 
+     * @param road
+     */
+    public Node(String name, String road, int number) {
+    	this.name = name;
+    	defRoad = road;
+    	houseNumber = number;
+    	adjRoads = null;
+    	parent = null;
+    	cost = 0;
+    	heuristic = 0;
+    	totalCost = cost + heuristic;
+    }
+    
+    public Node(String name, double cost, double heuristic,
+    		Node parent) {
+    	this.name = name;
+    	defRoad = null;
+    	houseNumber = 0;
+    	adjRoads = new ArrayList<Road>();
+    	this.cost = cost;
+    	this.heuristic = heuristic;
+    	totalCost = this.cost + this.heuristic;
+    	
+    }
+    
+    // Queries:
+    
+    /**
+     * Return the name of the node.
+     * @return String name: the name of the node.
+     */
+    public String getName() {
+    	return name;
+    }
+    
+    /**
+     * Return the defining road name of the Node. 
+     * @return String defRoad: the name of the road creating the Node.
+     */
+    public String getDefRoad() {
+    	return defRoad;
+    }
+    
+    /**
+     * Return the number of the house of the node.
+     * @return int houseNumber: the number of the house.
+     */
+    public int getHouseNumber() {
+    	return houseNumber;
+    }
+    
+    /**
+     * Return the list of adjacent Roads to the Junction.
+     * @return ArrayList adjRoad: the list of adjacent Roads.
+     */
+    public ArrayList<Road> getAdjRoads() {
+    	return adjRoads;
+    }
+    
+    /**
+     * Return the parent node.
+     * @return Node parent: the parent Node.
+     */
+    public Node getParent() {
+    	return parent;
+    }
+    
+    /**
+     * Return the total cost associated with the Node.
+     * @return double totalCost: the Node's cost.
+     */
+    public double getTotalCost() {
+    	return totalCost;
+    }
+    
+    /**
+     * Return the cost associated with the Road's length.
+     * @return double cost: the Road's cost.
+     */
+    public double getCost() {
+    	return cost;
+    }
+    
+    /**
+     * Return the estimated heuristic cost of the path between the current
+     * Node and the goal.
+     * @return double heuristic: the expected heuristic cost.
+     */
+    public double getHeuristic() {
+    	return heuristic;
+    }
+    
+    /**
+     * Determine if a Node is in a junction. Otherwise the Node is either
+     * the root or the goal.
+     * @return
+     */
+    public boolean isJunction() {
+    	if(houseNumber == 0)
+    		return true;
+    	return false;
+    }
+    
+    // Commands:
+    
+    public void addAdjRoad(Road road) {
+    	adjRoads.add(road);
+    }
 }
