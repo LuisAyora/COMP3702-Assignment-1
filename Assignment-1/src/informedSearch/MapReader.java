@@ -2,6 +2,7 @@ package informedSearch;
 
 import java.io.*;
 import java.util.*;
+import java.math.*;
 
 /**
  * 
@@ -11,7 +12,7 @@ import java.util.*;
  *
  */
 public class MapReader {
-	private List<Road> roads;
+	private Hashtable<String,Road> roads;
 	/**
 	 * Constructor:
 	 * Instantiate a MapReader object that will extract all the information of
@@ -28,8 +29,8 @@ public class MapReader {
 	 * @param filename: the string name of the text file that will be read.
 	 * @return roadList: the list of roads with all the required information.
 	 */
-	private List<Road> loadRoads(String filename) {
-		List<Road> roadList = new ArrayList<Road>();
+	private Hashtable<String,Road> loadRoads(String filename) {
+		Hashtable<String,Road> roadTable = new Hashtable<String,Road>();
 		try {
 			FileReader fileReader = new FileReader(filename);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -42,7 +43,7 @@ public class MapReader {
 				}
 				Road road = new Road(info[0],info[1],info[2],
 						Double.parseDouble(info[3]),Integer.parseInt(info[4]));
-				roadList.add(road);
+				roadTable.put(road.getName(),road);
 			}
 			bufferedReader.close();
 		}
@@ -52,16 +53,16 @@ public class MapReader {
 		catch(IOException ex){
 			ex.printStackTrace();
 		}
-		return roadList;
+		return roadTable;
 	}
 	
 	public List<Movement> get_Moves(Node curPos,Node goal) {
 		ArrayList<Movement> moves=new ArrayList<Movement>();
 		if (current.isJunction()){
-			int i;
 			double heuristic=0;
-			for (i=0;i<roads.size();i++) {
+			for (Enumeration<String> enumerator=roads.keys();enumerator.hasMoreElements();) {
 				/*Junction is start junction in Road*/
+				String i=new String(enumerator.nextElement());
 				if (curPos.getName().equals(roads.get(i).getStart())) {
 					/*Check if road is the goal road*/
 					if (goal.getDefRoad().equals(roads.get(i).getName())) {
@@ -91,6 +92,8 @@ public class MapReader {
 				}
 				/*Junction is end junction in Road*/
 				else if(curPos.getName().equals(roads.get(i).getEnd())) {
+					
+					/*Checking if solution is in the road being processed*/
 					if (goal.getDefRoad().equals(roads.get(i).getName())) {
 						String name=goal.getName();
 						int number=goal.getHouseNumber();
@@ -116,6 +119,70 @@ public class MapReader {
 						moves.add(movToAdd);
 					}
 				}
+			}
+		}
+		/*If No junction node*/
+		else {
+			double heuristic=0;
+			/*If goal in the road being processed*/
+			if (goal.getDefRoad().equals(curPos.getDefRoad())) {
+				String name=goal.getName();
+				int numberG=goal.getHouseNumber();
+				double lotWidth=2*roads.get(goal.getDefRoad()).getLength()/roads.get(goal.getDefRoad()).getLots();
+				
+				//Current House Number
+				int numberCC;
+				if (curPos.getHouseNumber()%2==0) {
+					numberCC=curPos.getHouseNumber();
+				}else {
+					numberCC=curPos.getHouseNumber()+1;
+				}
+				
+				int numberGG;
+				//Goal House Number
+				if (numberG%2==0) {
+					numberGG=numberG;
+				}else {
+					numberGG=numberG+1;
+				}
+				
+				double dist=lotWidth*Math.abs(numberGG-numberCC)/2;
+				
+				double cost=curPos.getCost()+dist;
+				/*Ask to modify constructor*/
+				Node nodeToAdd=new Node(name,goal.getDefRoad(),numberG,cost,curPos);
+				Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
+				moves.add(movToAdd);
+			}
+			/*If goal is not in the road being processed, expand to both end-of-road junctions*/
+			else {
+				double lotWidth=2*roads.get(curPos.getDefRoad()).getLength()/roads.get(curPos.getDefRoad()).getLots();
+				String name1=roads.get(curPos.getDefRoad()).getStart();
+				String name2=roads.get(curPos.getDefRoad()).getEnd();
+				int number;
+
+				if (curPos.getHouseNumber()%2==0) {
+					number=curPos.getHouseNumber();
+				}else {
+					number=curPos.getHouseNumber()+1;
+				}
+				
+				double dist1=lotWidth*(number+1)/2;
+				double dist2=roads.get(curPos.getDefRoad()).getLength()-dist1;
+
+				Node nodeToAdd1=new Node(name1,null,curPos.getCost()+dist1,heuristic,curPos);
+				Movement movToAdd1=new Movement(nodeToAdd1,nodeToAdd1.getCost()+nodeToAdd1.getHeuristic());
+				moves.add(movToAdd1);
+				
+				Node nodeToAdd2=new Node(name1,null,curPos.getCost()+dist1,heuristic,curPos);
+				Movement movToAdd2=new Movement(nodeToAdd2,nodeToAdd2.getCost()+nodeToAdd2.getHeuristic());
+				moves.add(movToAdd2);
+				
+				/**
+				 * CHEEEEEECKKKK THE ARGUMENTS OF THE NODE CREATION FOR THE JUNCTIONS AND GOAL AND START
+				 */
+				
+				
 			}
 		}
 	}
