@@ -28,19 +28,23 @@ public class Node {
      * Instantiate the root Node object for the search
      * algorithm by giving the name of the Node and the Road, 
      * and the house number. 
+     * For Node start set parent as null
      * @param road
      */
-    public Node(String name, String road, int number) {
+    /*Goal or Start node*/
+    public Node(String name, String road, int number,double costVal,Node parent) {
     	this.name = name;
     	defRoad = road;
     	houseNumber = number;
     	adjRoads = null;
-    	parent = null;
-    	cost = 0;
+    	this.parent = parent;
+    	cost = costVal;
     	heuristic = 0;
     	totalCost = cost + heuristic;
     }
     
+    //Overload
+    /*Junction Node*/
     public Node(String name, double cost, double heuristic,
     		Node parent) {
     	this.name = name;

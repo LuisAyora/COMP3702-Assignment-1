@@ -2,7 +2,6 @@ package informedSearch;
 
 import java.io.*;
 import java.util.*;
-import java.math.*;
 
 /**
  * 
@@ -88,7 +87,7 @@ public class MapReader {
 						moves.add(movToAdd);
 					}else {
 						/*Create junction node*/
-						Node nodeToAdd=new Node(roads.get(i).getEnd(),null,curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Node nodeToAdd=new Node(roads.get(i).getEnd(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}
@@ -120,7 +119,7 @@ public class MapReader {
 						moves.add(movToAdd);
 					}else {
 						/*Add junction node*/
-						Node nodeToAdd=new Node(roads.get(i).getStart(),null,curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Node nodeToAdd=new Node(roads.get(i).getStart(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}
@@ -178,11 +177,11 @@ public class MapReader {
 				double dist2=roads.get(curPos.getDefRoad()).getLength()-dist1;
 
 				/*Junction nodes to be added*/
-				Node nodeToAdd1=new Node(name1,null,curPos.getCost()+dist1,heuristic,curPos);
+				Node nodeToAdd1=new Node(name1,curPos.getCost()+dist1,heuristic,curPos);
 				Movement movToAdd1=new Movement(nodeToAdd1,nodeToAdd1.getCost()+nodeToAdd1.getHeuristic());
 				moves.add(movToAdd1);
 				
-				Node nodeToAdd2=new Node(name1,null,curPos.getCost()+dist1,heuristic,curPos);
+				Node nodeToAdd2=new Node(name2,curPos.getCost()+dist2,heuristic,curPos);
 				Movement movToAdd2=new Movement(nodeToAdd2,nodeToAdd2.getCost()+nodeToAdd2.getHeuristic());
 				moves.add(movToAdd2);
 				
@@ -193,6 +192,7 @@ public class MapReader {
 				
 			}
 		}
+		return moves;
 	}
 	
 	// Queries
@@ -221,6 +221,6 @@ public class MapReader {
 		MapReader mr = new MapReader("src/Files/test2.txt");
 		Hashtable<String,Road> rl = mr.getRoads();
 		System.out.println(mr.toString());
-		System.out.println(rl.get(0).toString());
+		//System.out.println(rl.get(0).toString());
 	}	
 }
