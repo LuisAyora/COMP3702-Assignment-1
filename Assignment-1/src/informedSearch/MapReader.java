@@ -59,11 +59,15 @@ public class MapReader {
 		ArrayList<Movement> moves=new ArrayList<Movement>();
 		if (curPos.isJunction()){
 			double heuristic=0;
+			int counter=0;
 			for (Enumeration<String> enumerator=roads.keys();enumerator.hasMoreElements();) {
 				/*Junction is start junction in Road*/
+				counter++;
 				String i=new String(enumerator.nextElement());
+				System.out.println("Pevious\t"+Integer.toString(counter)+"i is:\t"+i);
 				if (curPos.getName().equals(roads.get(i).getStart())) {
 					/*Check if road is the goal road*/
+					System.out.println(Integer.toString(counter)+"i is:\t"+i);
 					if (goal.getDefRoad().equals(roads.get(i).getName())) {
 						String name=goal.getName();
 						int number=goal.getHouseNumber();
@@ -222,7 +226,7 @@ public class MapReader {
 		Hashtable<String,Road> rl = mr.getRoads();
 		System.out.println(mr.toString());
 		
-		Node root=new Node("2Warren", "Warren", 0,0,null);
+		Node root=new Node("2Warren", "Warren", 2,0,0,null);
 		
 		Node junction1= new Node("J1","Warren", 3, 0,
 	    		root);

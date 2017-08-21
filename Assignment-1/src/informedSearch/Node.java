@@ -32,14 +32,14 @@ public class Node {
      * @param road
      */
     /*Goal or Start*/
-    public Node(String name, String road, int number,double costVal,Node parent) {
+    public Node(String name, String road, int number,double costVal,double heuristic,Node parent) {
     	this.name = name;
     	defRoad = road;
     	houseNumber = number;
     	adjRoads = null;
     	this.parent = parent;
     	cost = costVal;
-    	heuristic = 0;
+    	this.heuristic = heuristic;
     	totalCost = cost + heuristic;
     }
     
@@ -48,7 +48,7 @@ public class Node {
     public Node(String name,String road, double cost, double heuristic,
     		Node parent) {
     	this.name = name;
-    	defRoad = null;
+    	defRoad = road;
     	houseNumber = 0;
     	adjRoads = new ArrayList<Road>();
     	this.cost = cost;
