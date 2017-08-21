@@ -1,5 +1,7 @@
 package informedSearch;
 
+import java.util.Enumeration;
+
 /**
  * 
  * @author A-Team
@@ -8,8 +10,8 @@ package informedSearch;
  *
  */
 public class Movement {
-	Node destination;
-	double cost;
+	private Node destination;
+	private double cost;
 	
 	/**
 	 * 
@@ -21,4 +23,17 @@ public class Movement {
 		destination=node;
 		cost=dist;
 	}
+	
+	
+	/**
+	 * Queries
+	 * @return
+	 */
+	
+	public Node getDestination() {
+		return destination;
+	}
+	public double getCost() {
+		return cost;
+	}	
 }

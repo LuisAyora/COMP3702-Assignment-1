@@ -31,7 +31,7 @@ public class Node {
      * For Node start set parent as null
      * @param road
      */
-    /*Goal or Start node*/
+    /*Goal or Start*/
     public Node(String name, String road, int number,double costVal,Node parent) {
     	this.name = name;
     	defRoad = road;
@@ -45,7 +45,7 @@ public class Node {
     
     //Overload
     /*Junction Node*/
-    public Node(String name, double cost, double heuristic,
+    public Node(String name,String road, double cost, double heuristic,
     		Node parent) {
     	this.name = name;
     	defRoad = null;

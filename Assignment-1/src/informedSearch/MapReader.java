@@ -87,7 +87,7 @@ public class MapReader {
 						moves.add(movToAdd);
 					}else {
 						/*Create junction node*/
-						Node nodeToAdd=new Node(roads.get(i).getEnd(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Node nodeToAdd=new Node(roads.get(i).getEnd(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}
@@ -119,7 +119,7 @@ public class MapReader {
 						moves.add(movToAdd);
 					}else {
 						/*Add junction node*/
-						Node nodeToAdd=new Node(roads.get(i).getStart(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Node nodeToAdd=new Node(roads.get(i).getStart(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}
@@ -177,11 +177,11 @@ public class MapReader {
 				double dist2=roads.get(curPos.getDefRoad()).getLength()-dist1;
 
 				/*Junction nodes to be added*/
-				Node nodeToAdd1=new Node(name1,curPos.getCost()+dist1,heuristic,curPos);
+				Node nodeToAdd1=new Node(name1,curPos.getDefRoad(),curPos.getCost()+dist1,heuristic,curPos);
 				Movement movToAdd1=new Movement(nodeToAdd1,nodeToAdd1.getCost()+nodeToAdd1.getHeuristic());
 				moves.add(movToAdd1);
 				
-				Node nodeToAdd2=new Node(name2,curPos.getCost()+dist2,heuristic,curPos);
+				Node nodeToAdd2=new Node(name2,curPos.getDefRoad(),curPos.getCost()+dist2,heuristic,curPos);
 				Movement movToAdd2=new Movement(nodeToAdd2,nodeToAdd2.getCost()+nodeToAdd2.getHeuristic());
 				moves.add(movToAdd2);
 				
@@ -218,9 +218,23 @@ public class MapReader {
 	
 	// Dummy main method for testing.
 	public static void main(String[] args) {
-		MapReader mr = new MapReader("src/Files/test2.txt");
+		MapReader mr = new MapReader("src/Files/test-simple.txt");
 		Hashtable<String,Road> rl = mr.getRoads();
 		System.out.println(mr.toString());
-		//System.out.println(rl.get(0).toString());
+		
+		Node root=new Node("2Warren", "Warren", 0,0,null);
+		
+		Node junction1= new Node("J1","Warren", 3, 0,
+	    		root);
+		
+		Node goal=new Node("Carmody1", "Carmody", 1,0,null);
+		
+		List<Movement> moves=mr.get_Moves(junction1,goal);
+		
+		System.out.println("The Next Moves are: \n \n");
+		
+		for (Movement theMove:moves) {
+			System.out.println(String.format("%f",theMove.getCost())+"\t"+theMove.getDestination().getName()+"\n");
+		}
 	}	
 }
