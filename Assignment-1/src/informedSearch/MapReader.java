@@ -61,11 +61,11 @@ public class MapReader {
 			double heuristic=0;
 			int counter=0;
 			for (Enumeration<String> enumerator=roads.keys();enumerator.hasMoreElements();) {
-				/*Junction is start junction in Road*/
 				counter++;
 				String i=new String(enumerator.nextElement());
 				System.out.println("Pevious\t"+Integer.toString(counter)+"i is:\t"+i);
-				if (curPos.getName().equals(roads.get(i).getStart())) {
+				/*Junction is start junction in Road*/
+				if ((curPos.getName().equals(roads.get(i).getStart()))&&(curPos.getDefRoad().equals(roads.get(i).getName())==false)) {
 					/*Check if road is the goal road*/
 					System.out.println(Integer.toString(counter)+"i is:\t"+i);
 					if (goal.getDefRoad().equals(roads.get(i).getName())) {
@@ -86,7 +86,7 @@ public class MapReader {
 						double cost=curPos.getCost()+dist;
 						/*Ask to modify constructor*/
 						/*Create Goal Node*/
-						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,curPos);
+						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
 					}else {
@@ -97,7 +97,7 @@ public class MapReader {
 					}
 				}
 				/*Junction is end junction in Road*/
-				else if(curPos.getName().equals(roads.get(i).getEnd())) {
+				else if(curPos.getName().equals(roads.get(i).getEnd())&&(curPos.getDefRoad().equals(roads.get(i).getName())==false)) {
 					
 					/*Checking if solution is in the road being processed*/
 					if (goal.getDefRoad().equals(roads.get(i).getName())) {
@@ -118,10 +118,10 @@ public class MapReader {
 						
 						double cost=curPos.getCost()+dist;
 						/*Add Goal Node*/
-						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,curPos);
+						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 						moves.add(movToAdd);
-					}else {
+					}else if(curPos.getDefRoad().equals(roads.get(i).getName())==false){
 						/*Add junction node*/
 						Node nodeToAdd=new Node(roads.get(i).getStart(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
 						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
@@ -160,7 +160,7 @@ public class MapReader {
 				double cost=curPos.getCost()+dist;
 				
 				/*goal Node to be added*/
-				Node nodeToAdd=new Node(name,goal.getDefRoad(),numberG,cost,curPos);
+				Node nodeToAdd=new Node(name,goal.getDefRoad(),numberG,cost,heuristic,curPos);
 				Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
 				moves.add(movToAdd);
 			}
@@ -177,7 +177,7 @@ public class MapReader {
 					number=curPos.getHouseNumber()+1;
 				}
 				
-				double dist1=lotWidth*(number+1)/2;
+				double dist1=lotWidth*(number-1)/2;
 				double dist2=roads.get(curPos.getDefRoad()).getLength()-dist1;
 
 				/*Junction nodes to be added*/
@@ -221,19 +221,28 @@ public class MapReader {
 	}
 	
 	// Dummy main method for testing.
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
+		/*Test nodes for Simple Test data*/
+		/*
 		MapReader mr = new MapReader("src/Files/test-simple.txt");
 		Hashtable<String,Road> rl = mr.getRoads();
-		System.out.println(mr.toString());
-		
+		System.out.println(mr.toString()); 
+		 
 		Node root=new Node("2Warren", "Warren", 2,0,0,null);
-		
 		Node junction1= new Node("J1","Warren", 3, 0,
 	    		root);
+		Node goal=new Node("Carmody1", "Carmody", 1,0,0,null);
+		*/
 		
-		Node goal=new Node("Carmody1", "Carmody", 1,0,null);
+		MapReader mr = new MapReader("src/Files/test2.txt");
+		Hashtable<String,Road> rl = mr.getRoads();
+		System.out.println(mr.toString()); 
+		Node root=new Node("2Road-21", "Road-21", 2,0,0,null);
+		Node junction1= new Node("J17","Road-21", 1000, 0,
+	    		root);
+		Node goal=new Node("3Road-21", "Road-21", 3,0,0,null);
 		
-		List<Movement> moves=mr.get_Moves(junction1,goal);
+		List<Movement> moves=mr.get_Moves(root,goal);
 		
 		System.out.println("The Next Moves are: \n \n");
 		

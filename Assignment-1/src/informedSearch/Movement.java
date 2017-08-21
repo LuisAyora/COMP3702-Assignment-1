@@ -1,7 +1,5 @@
 package informedSearch;
 
-import java.util.Enumeration;
-
 /**
  * 
  * @author A-Team
