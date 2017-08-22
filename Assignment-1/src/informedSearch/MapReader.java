@@ -55,8 +55,8 @@ public class MapReader {
 		return roadTable;
 	}
 	
-	public List<Movement> get_Moves(Node curPos,Node goal) {
-		ArrayList<Movement> moves=new ArrayList<Movement>();
+	public List<Node> get_Moves(Node curPos,Node goal) {
+		ArrayList<Node> moves=new ArrayList<Node>();
 		if (curPos.isJunction()){
 			double heuristic=0;
 			int counter=0;
@@ -86,14 +86,12 @@ public class MapReader {
 						double cost=curPos.getCost()+dist;
 						/*Ask to modify constructor*/
 						/*Create Goal Node*/
-						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,heuristic,curPos);
-						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
-						moves.add(movToAdd);
+						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,heuristic,curPos);						
+						moves.add(nodeToAdd);
 					}else {
 						/*Create junction node*/
 						Node nodeToAdd=new Node(roads.get(i).getEnd(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
-						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
-						moves.add(movToAdd);
+						moves.add(nodeToAdd);
 					}
 				}
 				/*Junction is end junction in Road*/
@@ -119,13 +117,11 @@ public class MapReader {
 						double cost=curPos.getCost()+dist;
 						/*Add Goal Node*/
 						Node nodeToAdd=new Node(name,roads.get(i).getName(),number,cost,heuristic,curPos);
-						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
-						moves.add(movToAdd);
+						moves.add(nodeToAdd);
 					}else if(curPos.getDefRoad().equals(roads.get(i).getName())==false){
 						/*Add junction node*/
 						Node nodeToAdd=new Node(roads.get(i).getStart(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
-						Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
-						moves.add(movToAdd);
+						moves.add(nodeToAdd);
 					}
 				}
 			}
@@ -161,8 +157,7 @@ public class MapReader {
 				
 				/*goal Node to be added*/
 				Node nodeToAdd=new Node(name,goal.getDefRoad(),numberG,cost,heuristic,curPos);
-				Movement movToAdd=new Movement(nodeToAdd,nodeToAdd.getCost()+nodeToAdd.getHeuristic());
-				moves.add(movToAdd);
+				moves.add(nodeToAdd);
 			}
 			/*If goal is not in the road being processed, expand to both end-of-road junctions*/
 			else {
@@ -182,12 +177,10 @@ public class MapReader {
 
 				/*Junction nodes to be added*/
 				Node nodeToAdd1=new Node(name1,curPos.getDefRoad(),curPos.getCost()+dist1,heuristic,curPos);
-				Movement movToAdd1=new Movement(nodeToAdd1,nodeToAdd1.getCost()+nodeToAdd1.getHeuristic());
-				moves.add(movToAdd1);
+				moves.add(nodeToAdd1);
 				
 				Node nodeToAdd2=new Node(name2,curPos.getDefRoad(),curPos.getCost()+dist2,heuristic,curPos);
-				Movement movToAdd2=new Movement(nodeToAdd2,nodeToAdd2.getCost()+nodeToAdd2.getHeuristic());
-				moves.add(movToAdd2);
+				moves.add(nodeToAdd2);
 				
 				/**
 				 * CHEEEEEECKKKK THE ARGUMENTS OF THE NODE CREATION FOR THE JUNCTIONS AND GOAL AND START
@@ -242,12 +235,12 @@ public class MapReader {
 	    		root);
 		Node goal=new Node("3Road-21", "Road-21", 3,0,0,null);
 		
-		List<Movement> moves=mr.get_Moves(root,goal);
+		List<Node> moves=mr.get_Moves(root,goal);
 		
 		System.out.println("The Next Moves are: \n \n");
 		
-		for (Movement theMove:moves) {
-			System.out.println(String.format("%f",theMove.getCost())+"\t"+theMove.getDestination().getName()+"\n");
+		for (Node theMove:moves) {
+			System.out.println(String.format("%f",theMove.getTotalCost())+"\t"+theMove.getName()+"\n");
 		}
 	}	
 }

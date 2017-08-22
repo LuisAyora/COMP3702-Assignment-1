@@ -32,13 +32,13 @@ public class Node {
      * @param road
      */
     /*Goal or Start*/
-    public Node(String name, String road, int number,double costVal,double heuristic,Node parent) {
+    public Node(String name, String road, int number,double cost,double heuristic,Node parent) {
     	this.name = name;
     	defRoad = road;
     	houseNumber = number;
     	adjRoads = null;
     	this.parent = parent;
-    	cost = costVal;
+    	this.cost = cost;
     	this.heuristic = heuristic;
     	totalCost = cost + heuristic;
     }

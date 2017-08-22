@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.io.*;
 import java.util.Hashtable;
+import java.util.Comparator;
 
 public class Search {
 	private Node root;
@@ -21,8 +22,39 @@ public class Search {
 	 */
 	public Search(String infoFile, String queryFile) {
 		environment = new MapReader(infoFile);
-		queue = new PriorityQueue<Node>();
+		Comparator<Node> compare= new RoadComparator();
+		queue = new PriorityQueue<Node>(0,compare);
+		Hashtable<String,Node> expandedNodes=new Hashtable();
+		
+		
+		/*Node root=new Node("name", "roadName", int number,double cost,double heuristic,Node parent)*/
+		Node root=new Node("nameRoot", "roadName", 5,0,100,null);
+		Node goal=new Node("2nameGoal", "roadName2", 2,0,0,null);
+		queue.add(root);
+		
+		
+		
+		
+		
 	}
+	
+	/**
+	 * Comparator for roads
+	 */
+	private class RoadComparator implements Comparator<Node>{
+		@Override
+		public int compare(Node a,Node b) {
+			if(a.getTotalCost()<b.getTotalCost()) {
+				return 1;
+			}
+			if(a.getTotalCost()>b.getTotalCost()) {
+				return -1;
+			}
+			return 0;
+		}
+	}
+	
+	
 /*
 ArrayList generateSolution(Node end) {
     ArrayList<Node> sol = new ArrayList<Node>();
