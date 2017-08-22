@@ -54,7 +54,7 @@ public class Node {
     	this.cost = cost;
     	this.heuristic = heuristic;
     	totalCost = this.cost + this.heuristic;
-    	
+    	this.parent=parent;
     }
     
     // Queries:

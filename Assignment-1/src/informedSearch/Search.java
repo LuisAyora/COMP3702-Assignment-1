@@ -1,10 +1,9 @@
 package informedSearch;
 
 import java.util.PriorityQueue;
-import java.util.Scanner;
-import java.io.*;
 import java.util.Hashtable;
 import java.util.Comparator;
+import java.util.List;
 
 public class Search {
 	private Node root;
@@ -23,18 +22,46 @@ public class Search {
 	public Search(String infoFile, String queryFile) {
 		environment = new MapReader(infoFile);
 		Comparator<Node> compare= new RoadComparator();
-		queue = new PriorityQueue<Node>(0,compare);
-		Hashtable<String,Node> expandedNodes=new Hashtable();
+		queue = new PriorityQueue<Node>(1,compare);
+		Hashtable<String,Node> expandedNodes=new Hashtable<String,Node>();
 		
 		
 		/*Node root=new Node("name", "roadName", int number,double cost,double heuristic,Node parent)*/
-		Node root=new Node("nameRoot", "roadName", 5,0,100,null);
-		Node goal=new Node("2nameGoal", "roadName2", 2,0,0,null);
+		this.root=new Node("1Road-1", "Road-1", 1,0,0,null);
+		this.goal=new Node("1Road-12", "Road-12", 1,0,0,null);
 		queue.add(root);
 		
+		Node result;
 		
+		/**
+		 * 		gives the root as output if no path is found
+		 * 		otherwise it gives the goal Node as head of
+		 * 		a linked list
+		 * */
+		while (true) {
+			if(queue.isEmpty()) {
+				result=root;
+				break;
+			}else {
+				Node current=queue.poll();
+				expandedNodes.put(current.getName(), current);
+				if (goal.getName().equals(current.getName())) {
+					result=current;
+					break;
+				}
+				List<Node> children=environment.get_Moves(current, goal);
+				for (Node child:children) {
+					if (!expandedNodes.containsKey(child.getName()))
+						queue.add(child);
+				}
+			}
+			
+		}
 		
-		
+		String resToPrint=generateSolution(result,"");
+		System.out.println("Cost: "+Double.toString(result.getCost()));
+		System.out.println("The solution is");
+		System.out.println(resToPrint);
 		
 	}
 	
@@ -45,27 +72,40 @@ public class Search {
 		@Override
 		public int compare(Node a,Node b) {
 			if(a.getTotalCost()<b.getTotalCost()) {
-				return 1;
+				return -1;
 			}
 			if(a.getTotalCost()>b.getTotalCost()) {
-				return -1;
+				return 1;
 			}
 			return 0;
 		}
 	}
 	
 	
-/*
-ArrayList generateSolution(Node end) {
-    ArrayList<Node> sol = new ArrayList<Node>();
-	if(end.getParent() == null) { 
-    	sol.add(end);
-    	return sol;
+
+	String generateSolution(Node end,String output) {
+
+		/*For junction nodes*/
+		if (end.isJunction()) {
+			if(end.getParent() == null) { 
+				return output;
+			}
+			else {
+				return generateSolution(end.getParent(),end.getDefRoad()+"-"+end.getName()+"-"+output);
+			}
+		}
+		/*For non-junction nodes*/
+		else {
+			/*Start*/
+			if(end.getParent() == null) { 
+				return output;
+			}
+			/*Goal*/
+			else {
+				return generateSolution(end.getParent(),end.getDefRoad()+output);
+			}
+		}
+
 	}
-	else {
-		sol.add(end);
-		generateSolution(end.getParent());
-	}
-}
-*/
+
 }

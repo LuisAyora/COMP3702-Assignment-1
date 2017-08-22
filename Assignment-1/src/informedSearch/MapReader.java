@@ -59,15 +59,15 @@ public class MapReader {
 		ArrayList<Node> moves=new ArrayList<Node>();
 		if (curPos.isJunction()){
 			double heuristic=0;
-			int counter=0;
+			//int counter=0;
 			for (Enumeration<String> enumerator=roads.keys();enumerator.hasMoreElements();) {
-				counter++;
+				//counter++;
 				String i=new String(enumerator.nextElement());
-				System.out.println("Pevious\t"+Integer.toString(counter)+"i is:\t"+i);
+				//System.out.println("Pevious\t"+Integer.toString(counter)+"i is:\t"+i);
 				/*Junction is start junction in Road*/
 				if ((curPos.getName().equals(roads.get(i).getStart()))&&(curPos.getDefRoad().equals(roads.get(i).getName())==false)) {
 					/*Check if road is the goal road*/
-					System.out.println(Integer.toString(counter)+"i is:\t"+i);
+					//System.out.println(Integer.toString(counter)+"i is:\t"+i);
 					if (goal.getDefRoad().equals(roads.get(i).getName())) {
 						String name=goal.getName();
 						int number=goal.getHouseNumber();
@@ -90,7 +90,13 @@ public class MapReader {
 						moves.add(nodeToAdd);
 					}else {
 						/*Create junction node*/
-						Node nodeToAdd=new Node(roads.get(i).getEnd(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Node nodeToAdd;
+						if(curPos.isJunction()) {
+							nodeToAdd=new Node(roads.get(i).getEnd(),roads.get(i).getName(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						}
+						else {
+							nodeToAdd=new Node(roads.get(i).getEnd(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						}
 						moves.add(nodeToAdd);
 					}
 				}
@@ -120,7 +126,12 @@ public class MapReader {
 						moves.add(nodeToAdd);
 					}else if(curPos.getDefRoad().equals(roads.get(i).getName())==false){
 						/*Add junction node*/
-						Node nodeToAdd=new Node(roads.get(i).getStart(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						Node nodeToAdd;
+						if (curPos.isJunction()) {
+							nodeToAdd=new Node(roads.get(i).getStart(),roads.get(i).getName(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);
+						}else {
+							nodeToAdd=new Node(roads.get(i).getStart(),curPos.getDefRoad(),curPos.getCost()+roads.get(i).getLength(),heuristic,curPos);		
+						}
 						moves.add(nodeToAdd);
 					}
 				}
@@ -212,8 +223,7 @@ public class MapReader {
 			repr += roads.get(enumerator.nextElement()).toString() + "\n";
 		return repr;
 	}
-	
-	// Dummy main method for testing.
+	/*
 	public static void main(String[] args) {		
 		/*Test nodes for Simple Test data*/
 		/*
@@ -225,7 +235,7 @@ public class MapReader {
 		Node junction1= new Node("J1","Warren", 3, 0,
 	    		root);
 		Node goal=new Node("Carmody1", "Carmody", 1,0,0,null);
-		*/
+		
 		
 		MapReader mr = new MapReader("src/Files/test2.txt");
 		Hashtable<String,Road> rl = mr.getRoads();
@@ -242,5 +252,5 @@ public class MapReader {
 		for (Node theMove:moves) {
 			System.out.println(String.format("%f",theMove.getTotalCost())+"\t"+theMove.getName()+"\n");
 		}
-	}	
+	}*/
 }
