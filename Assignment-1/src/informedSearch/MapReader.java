@@ -223,34 +223,4 @@ public class MapReader {
 			repr += roads.get(enumerator.nextElement()).toString() + "\n";
 		return repr;
 	}
-	/*
-	public static void main(String[] args) {		
-		/*Test nodes for Simple Test data*/
-		/*
-		MapReader mr = new MapReader("src/Files/test-simple.txt");
-		Hashtable<String,Road> rl = mr.getRoads();
-		System.out.println(mr.toString()); 
-		 
-		Node root=new Node("2Warren", "Warren", 2,0,0,null);
-		Node junction1= new Node("J1","Warren", 3, 0,
-	    		root);
-		Node goal=new Node("Carmody1", "Carmody", 1,0,0,null);
-		
-		
-		MapReader mr = new MapReader("src/Files/test2.txt");
-		Hashtable<String,Road> rl = mr.getRoads();
-		System.out.println(mr.toString()); 
-		Node root=new Node("2Road-21", "Road-21", 2,0,0,null);
-		Node junction1= new Node("J17","Road-21", 1000, 0,
-	    		root);
-		Node goal=new Node("3Road-21", "Road-21", 3,0,0,null);
-		
-		List<Node> moves=mr.get_Moves(root,goal);
-		
-		System.out.println("The Next Moves are: \n \n");
-		
-		for (Node theMove:moves) {
-			System.out.println(String.format("%f",theMove.getTotalCost())+"\t"+theMove.getName()+"\n");
-		}
-	}*/
 }
