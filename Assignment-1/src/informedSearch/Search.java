@@ -19,7 +19,7 @@ public class Search {
 	 * @param String infoFile: the file to generate the environment.
 	 * @param String queryFile: 
 	 */
-	public Search(String infoFile, String queryFile) {
+	public Search(String infoFile, Node root, Node goal) {
 		environment = new MapReader(infoFile);
 		Comparator<Node> compare= new RoadComparator();
 		queue = new PriorityQueue<Node>(1,compare);
@@ -27,8 +27,10 @@ public class Search {
 		
 		
 		/*Node root=new Node("name", "roadName", int number,double cost,double heuristic,Node parent)*/
-		this.root=new Node("1Road-1", "Road-1", 1,0,0,null);
-		this.goal=new Node("1Road-12", "Road-12", 1,0,0,null);
+		//this.root=new Node("1Road-1", "Road-1", 1,0,0,null);
+		//this.goal=new Node("1Road-12", "Road-12", 1,0,0,null);
+		this.root = root;
+		this.goal = goal;
 		queue.add(root);
 		
 		Node result;
@@ -59,10 +61,8 @@ public class Search {
 		}
 		
 		String resToPrint=generateSolution(result,"");
-		System.out.println("Cost: "+Double.toString(result.getCost()));
-		System.out.println("The solution is");
-		System.out.println(resToPrint);
-		
+		System.out.println("Cost: "+Double.toString(result.getCost()) + " - " 
+				+ resToPrint);
 	}
 	
 	/**
@@ -107,5 +107,4 @@ public class Search {
 		}
 
 	}
-
 }
