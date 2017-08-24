@@ -1,9 +1,5 @@
 package informedSearch;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,12 +12,27 @@ public class PathFinder {
 	}
 	// Dummy main method for testing.
 	public static void main(String[] args) {
-		PathFinder pf = new PathFinder(args[0], args[1]);
-		for(int index = 0; index < pf.getQueries().size(); index += 2) {
-			Search app = new Search(args[0], pf.getQueries().get(index),
-					pf.getQueries().get(index + 1));
+		
+		try {
+		    File solution = new File("D:/laayo/Documents/output/solution.txt");
+		
+		    if(!solution.exists())
+			    solution.createNewFile();
+		
+		    FileWriter fw = new FileWriter(solution.getAbsoluteFile());
+		    BufferedWriter bw = new BufferedWriter(fw);
+		
+		    PathFinder pf = new PathFinder(args[0], args[1]);
+		    for(int index = 0; index < pf.getQueries().size(); index += 2) {
+			    Search app = new Search(args[0], pf.getQueries().get(index),
+				    	pf.getQueries().get(index + 1));
+			    bw.write(app.getSolution());
+			    bw.newLine();
+		    }
+		    bw.close();
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
-		//solution.close();
 	}
 	
 	public ArrayList<Node> getQueries() {

@@ -10,6 +10,7 @@ public class Search {
 	private Node goal;
 	private MapReader environment;
 	private PriorityQueue<Node> queue;
+	private String solution;
 	
 	/**
 	 * Constructor:
@@ -63,6 +64,16 @@ public class Search {
 		String resToPrint=generateSolution(result,"");
 		System.out.println("Cost: "+Double.toString(result.getCost()) + " - " 
 				+ resToPrint);
+		solution = "Cost: " + Double.toString(result.getCost()) + " - " 
+				+ resToPrint;
+	}
+	
+	/**
+	 * Return the string of the search solution
+	 * @return String solution: the optimal path for the search query.
+	 */
+	public String getSolution() {
+		return solution;
 	}
 	
 	/**

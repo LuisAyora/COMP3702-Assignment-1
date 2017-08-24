@@ -86,8 +86,4 @@ public class Road {
     	return "[" + name + ", " + start + ", " + end + ", " + 
             Double.toString(roadLength) + ", " + Integer.toString(nLots) + "]";
     }
-    public static void main(String[] args) {
-    	Road r = new Road("El huevo", "J1","J2", 8, 6);
-    	System.out.println(r.toString());
-    }
 }
